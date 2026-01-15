@@ -1,0 +1,19 @@
+target: 'Chance of Admit '
+
+features:
+  binary:
+    - Research
+  categorical: []
+  numerical:
+    - GRE Score
+    - TOEFL Score
+    - CGPA
+    - 'LOR '
+    - SOP
+    - University Rating
+  ordinal: []
+  exclude:
+    - Serial No.
+
+preprocessing:
+  missing_value_codes: {}
