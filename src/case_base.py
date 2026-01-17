@@ -210,6 +210,8 @@ class CaseBase:
             self.shap_importance.get(dim, 0.0) for dim in better_dims
         )
         worse_importance = sum(self.shap_importance.get(dim, 0.0) for dim in worse_dims)
+        if worse_importance == 0:
+            return better_importance > 0
         return (better_importance - worse_importance) / worse_importance > self.delta
 
     def find_valid_compensation(

@@ -250,6 +250,8 @@ class ConditionalCompensationChecker:
             return False
         better_imp = sum(shap_values.get(d, 0.0) for d in better_dims)
         worse_imp = sum(shap_values.get(d, 0.0) for d in worse_dims)
+        if worse_imp == 0:
+            return better_imp > 0
         relative_diff = (better_imp - worse_imp) / worse_imp
         if relative_diff < self.delta:
             return False
