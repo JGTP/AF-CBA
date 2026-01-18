@@ -144,7 +144,7 @@ def evaluate_ML_models(
         y_train_arr = y_train.values if isinstance(y_train, pd.Series) else y_train
         X_test_arr = X_test.values if isinstance(X_test, pd.DataFrame) else X_test
 
-        ripper = lw.RIPPER(k=2, prune_size=0.33)
+        ripper = lw.RIPPER(random_state=42)
         ripper.fit(trainset=X_train_arr, y=y_train_arr)
         y_pred = ripper.predict(X_test_arr)
         y_pred_series = pd.Series(y_pred, index=y_test.index)

@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-import json
 import time
 from dataclasses import dataclass, field
-from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
@@ -54,20 +52,21 @@ def log_timeout(
     info: GameTimeoutInfo,
     output_dir: Path = DEFAULT_TIMEOUT_LOG_DIR,
 ) -> Path:
-    output_dir.mkdir(parents=True, exist_ok=True)
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
-    filename = f"timeout_case_{info.case_id}_{timestamp}.json"
-    output_path = output_dir / filename
-    log_data = {
-        "timestamp": datetime.now().isoformat(),
-        "timeout_info": info.to_dict(),
-        "summary": (
-            f"Game timed out after {info.elapsed_seconds:.1f}s with "
-            f"{info.move_count} moves, {info.argument_count} arguments"
-        ),
-    }
-    with open(output_path, "w", encoding="utf-8") as f:
-        json.dump(log_data, f, indent=2, default=str)
+    # output_dir.mkdir(parents=True, exist_ok=True)
+    # timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+    # filename = f"timeout_case_{info.case_id}_{timestamp}.json"
+    # output_path = output_dir / filename
+    # log_data = {
+    #     "timestamp": datetime.now().isoformat(),
+    #     "timeout_info": info.to_dict(),
+    #     "summary": (
+    #         f"Game timed out after {info.elapsed_seconds:.1f}s with "
+    #         f"{info.move_count} moves, {info.argument_count} arguments"
+    #     ),
+    # }
+    # with open(output_path, "w", encoding="utf-8") as f:
+    #     json.dump(log_data, f, indent=2, default=str)
+    output_path = "skipped logging"
     return output_path
 
 

@@ -50,7 +50,8 @@ class CaseBase:
         cases: pd.DataFrame,
         target_column: str,
         min_correlation: float = 0.0,
-        delta: float = 0.2,
+        delta: float = 0.1,
+        epsilon: float = 0.5,
         random_state: int = 42,
         conditional_checker: Any = None,
         config: Any = None,
@@ -60,6 +61,7 @@ class CaseBase:
         self.feature_columns = [col for col in cases.columns if col != target_column]
         self.min_correlation = min_correlation
         self.delta = delta
+        self.epsilon = epsilon
         self.random_state = random_state
         self.conditional_checker = conditional_checker
         auth_config = self._get_config_section(config, "authoritativeness")
@@ -72,12 +74,18 @@ class CaseBase:
             self.preference_method = prefs_config.get("method", "global")
             if "delta" in prefs_config:
                 self.delta = prefs_config["delta"]
+            if "epsilon" in prefs_config:
+                self.epsilon = prefs_config["epsilon"]
         else:
             self.preference_method = "global"
         self.dimensions = self._infer_dimensions()
         self.shap_importance = self._compute_shap_importance()
+        self._correlation_matrix = self._compute_correlation_matrix()
         if self.auth_method != "default":
             self.calculate_alphas()
+
+    def _compute_correlation_matrix(self) -> pd.DataFrame:
+        return self.cases[self.feature_columns].corr()
 
     def _get_config_section(self, config: Any, section: str) -> dict | None:
         if config is None:
@@ -212,7 +220,20 @@ class CaseBase:
         worse_importance = sum(self.shap_importance.get(dim, 0.0) for dim in worse_dims)
         if worse_importance == 0:
             return better_importance > 0
-        return (better_importance - worse_importance) / worse_importance > self.delta
+        if (better_importance - worse_importance) / worse_importance <= self.delta:
+            return False
+        if len(better_dims) >= 2:
+            for d1 in better_dims:
+                for d2 in better_dims:
+                    if (
+                        d1 != d2
+                        and d1 in self._correlation_matrix.columns
+                        and d2 in self._correlation_matrix.columns
+                    ):
+                        corr_val = abs(self._correlation_matrix.loc[d1, d2])
+                        if not np.isnan(corr_val) and corr_val > self.epsilon:
+                            return False
+        return True
 
     def find_valid_compensation(
         self, better_dims: list[str], worse_dims: set[str], focus_case: pd.Series = None

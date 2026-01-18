@@ -44,9 +44,9 @@ def build_runtime_config(args) -> RuntimeConfig:
         authoritativeness=getattr(args, "authoritativeness", True),
         auth_method=getattr(args, "auth_method", "harmonic_1"),
         conditional=getattr(args, "conditional", False),
-        delta=getattr(args, "delta", 0.2),
-        epsilon=getattr(args, "epsilon", 0.3),
-        min_support=getattr(args, "min_support", 10),
+        delta=getattr(args, "delta", 0.1),
+        epsilon=getattr(args, "epsilon", 0.5),
+        min_support=getattr(args, "min_support", 1),
         n_splits=getattr(args, "n_splits", 5),
         random_state=getattr(args, "random_state", 42),
         test_size=getattr(args, "test_size", 0.2),
@@ -141,8 +141,8 @@ def run_sweep(args) -> dict:
                     authoritativeness=authoritativeness,
                     auth_method=getattr(args, "auth_method", "harmonic_1"),
                     conditional=conditional,
-                    delta=getattr(args, "delta", 0.2),
-                    epsilon=getattr(args, "epsilon", 0.3),
+                    delta=getattr(args, "delta", 0.1),
+                    epsilon=getattr(args, "epsilon", 0.5),
                     min_support=getattr(args, "min_support", 10),
                     n_splits=getattr(args, "n_splits", 5),
                     random_state=args.random_state,
@@ -268,7 +268,7 @@ def main(argv=None):
     experiment_parent.add_argument(
         "--sample-size",
         type=int,
-        default=1000,
+        default=500,
         help="Limit dataset to this many samples",
     )
     experiment_parent.add_argument(

@@ -9,7 +9,7 @@ from utils import convert_to_serialisable, save_json_results
 def train_RIPPER_classifier(X_train, y_train):
     X_train_array = X_train.values if isinstance(X_train, pd.DataFrame) else X_train
     y_train_array = y_train.values if isinstance(y_train, pd.Series) else y_train
-    ripper = lw.RIPPER(k=2, prune_size=0.33)
+    ripper = lw.RIPPER(random_state=42)
     try:
         ripper.fit(trainset=X_train_array, y=y_train_array)
     except Exception as e:

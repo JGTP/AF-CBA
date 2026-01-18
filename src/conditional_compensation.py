@@ -155,8 +155,8 @@ class ConditionalCompensationChecker:
         model,
         X: pd.DataFrame,
         y: pd.Series,
-        delta: float = 0.2,
-        epsilon: float = 0.30,
+        delta: float = 0.1,
+        epsilon: float = 0.50,
         min_support: int = 1,
         n_splits: int = 5,
     ):

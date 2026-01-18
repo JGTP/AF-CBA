@@ -43,12 +43,16 @@ def save_json_results(data, output_dir, filename_prefix):
 
 def compute_classification_metrics(y_true, y_pred, y_proba=None):
     labels = [0, 1]
+    if len(set(y_true)) < 2 or len(set(y_pred)) < 2:
+        mcc = 0.0
+    else:
+        mcc = matthews_corrcoef(y_true, y_pred)
     metrics = {
         "accuracy": accuracy_score(y_true, y_pred),
         "f1_score": f1_score(
             y_true, y_pred, average="macro", zero_division=0, labels=labels
         ),
-        "mcc": matthews_corrcoef(y_true, y_pred),
+        "mcc": mcc,
         "precision": precision_score(
             y_true, y_pred, average="macro", zero_division=0, labels=labels
         ),

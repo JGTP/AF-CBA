@@ -83,7 +83,7 @@ python src/main.py demo --dataset admission --case 5
 | `--authoritativeness` | True | Enable authoritativeness-based precedent selection |
 | `--auth-method` | harmonic_1 | Authoritativeness method: `relative`, `absolute`, `product`, `harmonic_X` |
 | `--conditional` | False | Use conditional preferences (vs global SHAP-based) |
-| `--delta` | 0.2 | Delta threshold for conditional preferences |
+| `--delta` | 0.1 | Delta threshold for conditional preferences |
 | `--epsilon` | 0.5 | Epsilon threshold for conditional preferences |
 | `--min-support` | 1 | Minimum support for conditional preference rules |
 | `--n-splits` | 5 | Number of CV splits for RIPPER rule extraction |
