@@ -247,7 +247,7 @@ def main(argv=None):
     experiment_parent.add_argument("--test-size", type=float, default=0.2)
     experiment_parent.add_argument("--random-state", type=int, default=42)
     experiment_parent.add_argument("--n-jobs", type=int, default=-1)
-    experiment_parent.add_argument("--timeout", type=float, default=None)
+    experiment_parent.add_argument("--timeout", type=float, default=60)
     experiment_parent.add_argument("--max-moves", type=int, default=None)
     experiment_parent.add_argument(
         "--heuristic",
@@ -268,7 +268,7 @@ def main(argv=None):
     experiment_parent.add_argument(
         "--sample-size",
         type=int,
-        default=3000,
+        default=1000,
         help="Limit dataset to this many samples",
     )
     experiment_parent.add_argument(
@@ -408,7 +408,7 @@ if __name__ == "__main__":
         default_args = [
             "sweep",
             "--datasets",
-            "admission",
+            "churn",
             "compas",
             "gtd",
             "churn",

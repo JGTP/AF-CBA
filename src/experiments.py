@@ -20,7 +20,8 @@ from game import AFCBAClassifier
 from preprocessing import CaseBaseConfig, DatasetProcessor, RuntimeConfig
 from utils import compute_classification_metrics, convert_to_serialisable
 import wittgenstein as lw
-
+from sklearn.ensemble import HistGradientBoostingClassifier
+from conditional_compensation import ConditionalCompensationChecker
 
 def scale_features(
     X_train: pd.DataFrame,
@@ -331,10 +332,28 @@ def run_single_fold(
         if len(X_train) == 0:
             raise ValueError(f"Fold {fold}: All training cases removed!")
     case_base_config = CaseBaseConfig.from_runtime_config(runtime_config)
+
+    conditional_checker = None
+    if runtime_config.conditional:
+        model = HistGradientBoostingClassifier(
+            random_state=runtime_config.random_state, max_iter=100
+        )
+        model.fit(X_train, y_train)
+        conditional_checker = ConditionalCompensationChecker(
+            model=model,
+            X=X_train,
+            y=y_train,
+            delta=runtime_config.delta,
+            epsilon=runtime_config.epsilon,
+            min_support=runtime_config.min_support,
+            n_splits=runtime_config.n_splits,
+        )
+
     case_base = create_case_base_from_data(
         X_train,
         y_train,
         random_state=runtime_config.random_state,
+        conditional_checker=conditional_checker,
         config=case_base_config,
     )
     sklearn_results, sklearn_predictions = evaluate_ML_models(
@@ -957,10 +976,28 @@ class Experiment:
             if len(X_train) == 0:
                 raise ValueError("All training cases removed for consistency!")
         case_base_config = CaseBaseConfig.from_runtime_config(self.runtime_config)
+
+        conditional_checker = None
+        if self.runtime_config.conditional:
+            model = HistGradientBoostingClassifier(
+                random_state=self.runtime_config.random_state, max_iter=100
+            )
+            model.fit(X_train, y_train)
+            conditional_checker = ConditionalCompensationChecker(
+                model=model,
+                X=X_train,
+                y=y_train,
+                delta=self.runtime_config.delta,
+                epsilon=self.runtime_config.epsilon,
+                min_support=self.runtime_config.min_support,
+                n_splits=self.runtime_config.n_splits,
+            )
+
         case_base = create_case_base_from_data(
             X_train,
             y_train,
             random_state=self.runtime_config.random_state,
+            conditional_checker=conditional_checker,
             config=case_base_config,
         )
         sklearn_results, sklearn_predictions = evaluate_ML_models(

@@ -58,7 +58,7 @@ def analyse_rulesets_globally(all_rulesets, full_dataset, target_name):
 def cross_validate_RIPPER(X, y, n_splits=5, progress_logger=None):
     kf = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=42)
     rule_occurrences = {}
-    for fold_idx, (train_idx, test_idx) in enumerate(kf.split(X)):
+    for fold_idx, (train_idx, test_idx) in enumerate(kf.split(X, y)):
         X_train, y_train = X.iloc[train_idx], y.iloc[train_idx]
         ripper, ruleset = train_RIPPER_classifier(X_train, y_train)
         if ruleset is None:

@@ -42,12 +42,19 @@ def save_json_results(data, output_dir, filename_prefix):
 
 
 def compute_classification_metrics(y_true, y_pred, y_proba=None):
+    labels = [0, 1]
     metrics = {
         "accuracy": accuracy_score(y_true, y_pred),
-        "f1_score": f1_score(y_true, y_pred, average="macro", zero_division=0),
+        "f1_score": f1_score(
+            y_true, y_pred, average="macro", zero_division=0, labels=labels
+        ),
         "mcc": matthews_corrcoef(y_true, y_pred),
-        "precision": precision_score(y_true, y_pred, average="macro", zero_division=0),
-        "recall": recall_score(y_true, y_pred, average="macro", zero_division=0),
+        "precision": precision_score(
+            y_true, y_pred, average="macro", zero_division=0, labels=labels
+        ),
+        "recall": recall_score(
+            y_true, y_pred, average="macro", zero_division=0, labels=labels
+        ),
     }
     if y_proba is not None:
         metrics["roc_auc"] = roc_auc_score(y_true, y_proba[:, 1])
