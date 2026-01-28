@@ -1,0 +1,31 @@
+target: Churn
+
+features:
+  binary:
+    - gender
+    - SeniorCitizen
+    - Partner
+    - Dependents
+    - PhoneService
+    - PaperlessBilling
+  categorical:
+    - MultipleLines
+    - InternetService
+    - OnlineSecurity
+    - OnlineBackup
+    - DeviceProtection
+    - TechSupport
+    - StreamingTV
+    - StreamingMovies
+    - PaymentMethod
+    - Contract
+  numerical:
+    - tenure
+    - MonthlyCharges
+    - TotalCharges
+  ordinal: []
+  exclude:
+    - customerID
+
+preprocessing:
+  missing_value_codes: {}
