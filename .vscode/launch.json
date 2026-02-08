@@ -1,0 +1,29 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "AF-CBA – Debug (n-jobs = 1)",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/main.py",
+            "console": "integratedTerminal",
+            "args": [
+                "sweep",
+                "--n-jobs",
+                "1"
+            ]
+        },
+        {
+            "name": "AF-CBA – Run (n-jobs = -1)",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/main.py",
+            "console": "integratedTerminal",
+            "args": [
+                "sweep",
+                "--n-jobs",
+                "-1"
+            ]
+        }
+    ]
+}
